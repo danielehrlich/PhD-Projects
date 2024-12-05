@@ -63,21 +63,3 @@ function [Omega] = Omegasolver(g, s, nu, psi, delta, lambda, params)
     Omega = [lpdf; hpdf];
 
 end
-
-
-% int1l = 0;
-% int2l = 0;
-% int3l = 0;
-% int1h = 0;
-% int2h = 0;
-% int3h = 0;
-% for x=1:xidx
-%     if x <= qidx
-%         int1l = int1l + hpdf(x)*(1 - (qhat(x)/((1+g)*qhat(q)))^theta);
-%         int2l = int2l + lpdf(x)*(1 - (qhat(x)/((1+g)*qhat(q)))^theta);
-%         int1h = int1h + lpdf(x)*(1 - (qhat(x)/((1+g)*qhat(q)))^theta);
-%         int2h = int2h + hpdf(x)*(1 - (qhat(x)/((1+g)*qhat(q)))^theta);
-%     end
-%     int3l = int3l + lpdf(x)*(1 - (qhat(x)/((1+g)*qhat(q)))^theta);
-%     int3h = int3h + hpdf(x)*(1 - (qhat(x)/((1+g)*qhat(q)))^theta);
-% end
