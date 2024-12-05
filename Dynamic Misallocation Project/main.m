@@ -25,7 +25,7 @@ s = 0.01;
 agexit = 0.6;
 data_moments = [aga, avscope, rel_scope01, rel_scale01, agexit, g, empg];
 
-% % parameter guess
+% parameter guess
 alpha = 0.81;
 beta = 15.9;
 gamma = 0.1;
@@ -34,32 +34,20 @@ mbarl = 0.1;
 theta =  8;
 sigma = 4;
 x0 = [alpha, beta, gamma, phih, mbarl, theta, sigma];
-% x0 = [alpha, beta, gamma, phih, mbarl, theta];
-% load params;
-% x0 = params(1:6);
 
+% calibrate equilibrium
 A = [0,0,0,0,0,-1,1];
 b = [1];
 Aeq = [];
 beq = [];
 lb = [0.7,  1, 0.001, 1, 0.000001, 2,   2];
 ub = [  1, 30,     1, 5,    0.5, 10, 5];
-
-% A = [];
-% b = [];
-% Aeq = [];
-% beq = [];
-% lb = [0.7,  1, 0.001, 1, 0.000001, sigma];
-% ub = [  1, 30,     1, 5,    0.5, 6];
 nonlcon = @(x)mycon(x);
 fun = @(x)calibration(x, data_moments);
 % options = optimoptions('fmincon','Display','iter','MaxIterations', 50);
 % [params,fval,exitflag,output] =  fmincon(fun,x0,A,b,Aeq,beq,lb,ub,nonlcon,options);
 options = optimoptions('patternsearch','Display','iter','MaxIterations', 50, 'MaxFunctionEvaluations', 300, 'Cache', 'on');
 [params,fval,exitflag,output] =  patternsearch(fun,x0,A,b,Aeq,beq,lb,ub,nonlcon,options);
-ptable = table(["alpha"; "beta"; "gamma"; "phih"; "mbar";"theta"; "sigma"], params');
-ptable.Properties.VariableNames = ["Parameter","Value"];
-ptable
 save params;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -72,15 +60,6 @@ mtable = table(["Ag Aquisition Prob"; "Av Scope"; "Relative Scope .1%"; "Rel Sca
 mtable.Properties.VariableNames = ["Moment", "Model Value", "Data Value"];
 mtable
 
-% params(6) = 1.02;
-% [delta2, lambda2, s2, g2, Omega2, iter, eq_error] = equilibrium(params);
-% moments2 = agmoments(delta2, lambda2, s2, g2, Omega2, params);
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% COUNTERFACTUALS
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% params(8) = 0.98*params(8);
-% [delta, lambda, s, g, Omega, iter, error] = equilibrium(guess, params);
 
 function [c,ceq]  = mycon(x)
     c = x(1)*x(4)-0.999;
